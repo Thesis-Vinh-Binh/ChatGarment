@@ -13,7 +13,6 @@ moderation_msg = "YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDELINES. PLEASE 
 
 handler = None
 
-
 def build_logger(logger_name, logger_filename):
     global handler
 

@@ -179,27 +179,30 @@ def ask_gpt4o(garment_name, garment_prompt, image_path, client):
         garment_name, garment_prompt
     )
 
-    response = client.chat.completions.create(
-        model="gpt-4o-2024-05-13",
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {   
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{base64_image}",
-                            "detail": "low"
-                        }
-                    },
-                ],
-            }
-        ],
-        max_tokens=300,
-    )
+    print(prompt)
 
-    result = response.choices[0].message.content
+    # response = client.chat.completions.create(
+    #     model="gpt-4o-2024-05-13",
+    #     messages=[
+    #         {
+    #             "role": "user",
+    #             "content": [
+    #                 {"type": "text", "text": prompt},
+    #                 {   
+    #                     "type": "image_url",
+    #                     "image_url": {
+    #                         "url": f"data:image/jpeg;base64,{base64_image}",
+    #                         "detail": "low"
+    #                     }
+    #                 },
+    #             ],
+    #         }
+    #     ],
+    #     max_tokens=300,
+    # )
+
+    # result = response.choices[0].message.content
+    result = ""
     result = str(result)
     print('result', result)
     result_dict = get_text_labels_foredit(result)

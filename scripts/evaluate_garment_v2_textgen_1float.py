@@ -179,20 +179,35 @@ def ask_gpt4o(garment_types, garment_names, garment_prompts, client):
             garment_names[i], garment_prompts[i]
         )
 
-        response = client.chat.completions.create(
-            model="gpt-4o-2024-05-13",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                    ],
-                }
-            ],
-            max_tokens=300,
-        )
+        print(prompt)
 
-        result = response.choices[0].message.content
+        # response = client.chat.completions.create(
+        #     model="gpt-4o-2024-05-13",
+        #     messages=[
+        #         {
+        #             "role": "user",
+        #             "content": [
+        #                 {"type": "text", "text": prompt},
+        #             ],
+        #         }
+        #     ],
+        #     max_tokens=300,
+        # )
+
+        # result = response.choices[0].message.content
+
+        result = ("{",
+            "'garment_name': 'shirt'",
+            "'geometry_styles': {",
+                "'width': ['normal'],",
+                "'length': ['normal'],",
+                "'sleeves': ['short sleeves', 'straight sleeves'],",
+                "'collar': ['crew neck'],",
+                "'hood': ['no hood'],",
+                "'extra': []",
+            "}",
+        "}")
+
         result = str(result)
         print('result', result)
         result_dict = get_text_labels_detailed(result)
@@ -350,7 +365,7 @@ def main(args):
     print('val_dataset', len(val_dataset))
     len_val_dataset = len(val_dataset)
 
-    client = OpenAI()
+    # client = OpenAI()
     
     random.seed(0)
     all_output_dir = []
