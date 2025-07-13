@@ -1,12 +1,12 @@
 #!/bin/bash
 
-export LD_LIBRARY_PATH=/is/software/nvidia/cuda-12.1/lib64
-export PATH=$PATH:/is/software/nvidia/cuda-12.1/bin
-export CUDA_HOME=/is/software/nvidia/cuda-12.1
+export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64
+export PATH=$PATH:/usr/local/cuda-12.8/bin
+export CUDA_HOME=/usr/local/cuda-12.8
 
-export CPATH=/is/software/nvidia/cudnn-8.4.1-cu11.6/include
-export C_INCLUDE_PATH=/is/software/nvidia/cudnn-8.4.1-cu11.6/include
-export LIBRARY_PATH=/is/software/nvidia/cudnn-8.4.1-cu11.6/lib64
+export CPATH=/venv/chatgarment/lib/python3.10/site-packages/nvidia/cudnn/include
+export C_INCLUDE_PATH=/venv/chatgarment/lib/python3.10/site-packages/nvidia/cudnn/include
+export LIBRARY_PATH=/venv/chatgarment/lib/python3.10/site-packages/nvidia/cudnn/lib
 export LD_LIBRARY_PATH=$LIBRARY_PATH:$LD_LIBRARY_PATH
 
 export EGL_DEVICE_ID=$GPU_DEVICE_ORDINAL
