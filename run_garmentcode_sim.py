@@ -79,7 +79,7 @@ for json_spec_file in garment_json_paths:
     saved_folder = os.path.dirname(json_spec_file)
     run_simultion_warp(
             json_spec_file,
-            'assets/Sim_props/default_sim_props.yaml',
+            '/workspace/GarmentCodeRC/assets/Sim_props/default_sim_props.yaml',
             saved_folder,
             easy_texture_path=args.easy_texture_path
         )

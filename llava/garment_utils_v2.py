@@ -613,6 +613,6 @@ if __name__ == "__main__":
 
     run_simultion_warp(
         'runs/try_vis/valid_garment_1/valid_garment_1_specification.json',
-        'assets/Sim_props/default_sim_props.yaml',
+        '/workspace/GarmentCodeRC/assets/Sim_props/default_sim_props.yaml',
         'runs/try_vis/valid_garment_1'
     )

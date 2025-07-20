@@ -1,0 +1,63 @@
+wholebody_garment:
+  collar:
+    b_bezier_x: -1
+    b_bezier_y: -1
+    b_collar: CircleNeckHalf
+    b_flip_curve: false
+    bc_angle: 77
+    bc_depth: -1
+    component:
+      depth: 4
+      hood_depth: -1
+      hood_length: -1
+      lapel_standing: true
+      style: Turtle
+    f_bezier_x: -1
+    f_bezier_y: -1
+    f_collar: CircleArcNeckHalf
+    f_flip_curve: false
+    fc_angle: 79
+    fc_depth: -1
+    width: -1
+  flare-skirt:
+    asymm:
+      front_length: -1
+    cut:
+      add: false
+      depth: -1
+      place: -1
+      width: -1
+    length: -1
+    rise: -1
+    skirt-many-panels:
+      n_panels: 11
+      panel_curve: 0
+    suns: -1
+  left:
+    enable_asym: false
+  meta:
+    bottom: SkirtManyPanels
+    upper: Shirt
+    wb: StraightWB
+  shirt:
+    flare: -1
+    length: -1
+    strapless: false
+    width: -1
+  sleeve:
+    armhole_shape: ArmholeCurve
+    connect_ruffle: -1
+    connecting_width: -1
+    cuff:
+      type: null
+    end_width: -1
+    length: -1
+    opening_dir_mix: -1
+    sleeve_angle: 36
+    sleeveless: false
+    smoothing_coeff: -1
+    standing_shoulder: false
+    standing_shoulder_len: -1
+  waistband:
+    waist: -1
+    width: -1
