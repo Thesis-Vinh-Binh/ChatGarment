@@ -602,20 +602,20 @@ design:
       - 0.5
       - 1.2
       type: float
-      v: 0.995
+      v: 0.987
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.58
+      v: 0.505
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.869
+      v: 0.822
     width:
       default_prob: 0.5
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.231
+      v: 0.213

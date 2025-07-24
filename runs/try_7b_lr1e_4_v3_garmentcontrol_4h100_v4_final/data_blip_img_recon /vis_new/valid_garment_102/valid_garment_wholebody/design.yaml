@@ -6,14 +6,14 @@ design:
       - 0.05
       - 0.95
       type: float
-      v: 0.242
+      v: 0.267
     b_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.164
+      v: 0.186
     b_collar:
       default_prob: 0.8
       range:
@@ -38,35 +38,35 @@ design:
       - 70
       - 110
       type: int
-      v: 85
+      v: 96
     bc_depth:
       default_prob: 0.4
       range:
       - 0
       - 2
       type: float
-      v: 0.0
+      v: 0.0244
     component:
       depth:
         range:
         - 2
         - 8
         type: int
-        v: 5
+        v: 8
       hood_depth:
         default_prob: 0.6
         range:
         - 1
         - 2
         type: float
-        v: 1.0
+        v: 1.02
       hood_length:
         default_prob: 0.6
         range:
         - 1
         - 1.5
         type: float
-        v: 1.0
+        v: 1.01
       lapel_standing:
         range:
         - true
@@ -81,21 +81,21 @@ design:
         - Hood2Panels
         - null
         type: select_null
-        v: Turtle
+        v: null
     f_bezier_x:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.321
+      v: 0.322
     f_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.549
+      v: 0.539
     f_collar:
       default_prob: 0.4
       range:
@@ -107,7 +107,7 @@ design:
       - CircleArcNeckHalf
       - Bezier2NeckHalf
       type: select
-      v: CircleNeckHalf
+      v: TrapezoidNeckHalf
     f_flip_curve:
       default_prob: 0.8
       range:
@@ -120,21 +120,21 @@ design:
       - 70
       - 110
       type: int
-      v: 82
+      v: 91
     fc_depth:
       default_prob: 0.3
       range:
       - 0.3
       - 2
       type: float
-      v: 0.405
+      v: 0.455
     width:
       default_prob: 0.4
       range:
       - -0.5
       - 1
       type: float
-      v: 0.218
+      v: 0.227
   flare-skirt:
     asymm:
       front_length:
@@ -772,14 +772,14 @@ design:
       - 1
       - 2
       type: float
-      v: 1.15
+      v: 1.13
     connecting_width:
       default_prob: 0.6
       range:
       - 0
       - 2
       type: float
-      v: 0.184
+      v: 0.183
     cuff:
       cuff_len:
         default_prob: 0.7
@@ -828,7 +828,7 @@ design:
       - 0.2
       - 2
       type: float
-      v: 0.998
+      v: 1.01
     length:
       range:
       - 0.1
@@ -841,13 +841,13 @@ design:
       - -0.9
       - 0.8
       type: float
-      v: 0.143
+      v: 0.149
     sleeve_angle:
       range:
       - 10
       - 50
       type: int
-      v: 39
+      v: 11
     sleeveless:
       default_prob: 0.7
       range:
@@ -874,7 +874,7 @@ design:
       - 4
       - 10
       type: float
-      v: 6.99
+      v: 7.07
   waistband:
     height:
       default_prob: 0.5

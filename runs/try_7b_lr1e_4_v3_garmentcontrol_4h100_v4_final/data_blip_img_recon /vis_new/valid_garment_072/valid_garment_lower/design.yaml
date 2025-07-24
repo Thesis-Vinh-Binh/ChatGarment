@@ -553,7 +553,7 @@ design:
       - FittedWB
       - null
       type: select_null
-      v: FittedWB
+      v: StraightWB
   pants:
     cuff:
       cuff_len:
@@ -602,20 +602,20 @@ design:
       - 0.5
       - 1.2
       type: float
-      v: 0.995
+      v: 0.992
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.488
+      v: 0.558
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.861
+      v: 0.863
     width:
       default_prob: 0.5
       range:
@@ -882,7 +882,7 @@ design:
       - -5
       - 15
       type: int
-      v: 0
+      v: -2
     waist:
       default_prob: 0.7
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.201
+      v: 0.178

@@ -537,7 +537,7 @@ design:
       - SkirtLevels
       - null
       type: select_null
-      v: PencilSkirt
+      v: Pants
     upper:
       default_prob: 0.3
       range:
@@ -562,31 +562,31 @@ design:
         - 0.05
         - 0.9
         type: float
-        v: 0.1
+        v: 0.352
       skirt_flare:
         range:
         - 1
         - 2
         type: float
-        v: 1.2
+        v: 1.48
       skirt_fraction:
         range:
         - 0.1
         - 0.9
         type: float
-        v: 0.5
+        v: 0.544
       skirt_ruffle:
         range:
         - 1
         - 1.5
         type: float
-        v: 1.0
+        v: 1.23
       top_ruffle:
         range:
         - 1
         - 2
         type: float
-        v: 1.0
+        v: 1.5
       type:
         default_prob: 0.5
         range:
@@ -595,27 +595,27 @@ design:
         - CuffBandSkirt
         - null
         type: select_null
-        v: null
+        v: CuffBand
     flare:
       default_prob: 0.3
       range:
       - 0.5
       - 1.2
       type: float
-      v: 1.0
+      v: 0.924
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.3
+      v: 0.386
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 1.0
+      v: 0.818
     width:
       default_prob: 0.5
       range:
@@ -630,34 +630,34 @@ design:
       - 0
       - 0.9
       type: float
-      v: 0.0888
+      v: 0
     flare:
       default_prob: 0.3
       range:
       - 0.6
       - 1.5
       type: float
-      v: 1.01
+      v: 1.0
     front_slit:
       default_prob: 0.4
       range:
       - 0
       - 0.9
       type: float
-      v: 0.217
+      v: 0
     left_slit:
       default_prob: 0.6
       range:
       - 0
       - 0.9
       type: float
-      v: 0.0
+      v: 0
     length:
       range:
       - 0.2
       - 0.95
       type: float
-      v: 0.298
+      v: 0.4
     low_angle:
       default_prob: 0.7
       range:
@@ -671,14 +671,14 @@ design:
       - 0
       - 0.9
       type: float
-      v: 0.0453
+      v: 0
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.834
+      v: 1
     style_side_cut:
       default_prob: 1.0
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.173
+      v: 0.21

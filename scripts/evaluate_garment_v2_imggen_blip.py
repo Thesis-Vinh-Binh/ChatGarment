@@ -40,7 +40,7 @@ from llava.train.train_garmentcode_outfit import ModelArguments, DataArguments, 
 from llava.garment_utils_v2 import run_garmentcode_parser_float50
 
 from openai import OpenAI
-
+import pandas as pd
 
 os.environ["MASTER_PORT"] = "23499"
 
@@ -67,7 +67,7 @@ def find_all_linear_names(model, lora_target_modules=['q_proj', 'v_proj']):
 
 
 class LazyImageDataset(Dataset):
-    """Dataset for supervised fine-tuning."""
+
 
     def __init__(self, imagefolder: str,
                  tokenizer: transformers.PreTrainedTokenizer,
@@ -78,12 +78,12 @@ class LazyImageDataset(Dataset):
         _dir = os.listdir(imagefolder)
         all_images = [item for item in _dir \
                       if (item.endswith('.png') or item.endswith('.jpg') or item.endswith('.jfif'))]
+        print(f'total images: {len(all_images)}')
         self.tokenizer = tokenizer
         self.captions = {}
         for item in _dir:
-            if item.endswith('json'):
-                with open(os.path.join(imagefolder, item), 'r') as f:
-                    self.captions = json.load(f)
+            if item.endswith('csv'):
+                self.captions = pd.read_csv(os.path.join(imagefolder, item))
                 break
         self.all_images = all_images
         self.data_args = data_args
@@ -98,9 +98,9 @@ class LazyImageDataset(Dataset):
         processor = self.data_args.image_processor
         image = Image.open(os.path.join(image_folder, image_file)).convert('RGB')
         caption = ""
-        for cap in self.captions:
-            if (cap['image'] == self.all_images[i]):
-                caption = cap['caption']
+        for index, row in self.captions.iterrows():
+            if (row['filename'] == self.all_images[i]):
+                caption = row['predicted']
         if self.data_args.image_aspect_ratio == 'pad':
             def expand2square(pil_img, background_color):
                 width, height = pil_img.size

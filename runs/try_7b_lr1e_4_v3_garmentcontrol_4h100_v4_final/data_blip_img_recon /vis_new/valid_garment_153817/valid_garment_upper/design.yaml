@@ -6,14 +6,14 @@ design:
       - 0.05
       - 0.95
       type: float
-      v: 0.245
+      v: 0.262
     b_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.148
+      v: 0.171
     b_collar:
       default_prob: 0.8
       range:
@@ -45,7 +45,7 @@ design:
       - 0
       - 2
       type: float
-      v: 0.019
+      v: 0.0522
     component:
       depth:
         range:
@@ -59,7 +59,7 @@ design:
         - 1
         - 2
         type: float
-        v: 1.01
+        v: 1.04
       hood_length:
         default_prob: 0.6
         range:
@@ -88,14 +88,14 @@ design:
       - 0.05
       - 0.95
       type: float
-      v: 0.319
+      v: 0.317
     f_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.532
+      v: 0.542
     f_collar:
       default_prob: 0.4
       range:
@@ -127,14 +127,14 @@ design:
       - 0.3
       - 2
       type: float
-      v: 0.407
+      v: 0.475
     width:
       default_prob: 0.4
       range:
       - -0.5
       - 1
       type: float
-      v: 0.215
+      v: 0.235
   flare-skirt:
     asymm:
       front_length:
@@ -693,14 +693,14 @@ design:
       - 0.7
       - 1.6
       type: float
-      v: 1.02
+      v: 0.987
     length:
       default_prob: 0.7
       range:
       - 0.5
       - 3.5
       type: float
-      v: 1.23
+      v: 1.24
     openfront:
       default_prob: 0.75
       range:
@@ -772,14 +772,14 @@ design:
       - 1
       - 2
       type: float
-      v: 1.2
+      v: 1.18
     connecting_width:
       default_prob: 0.6
       range:
       - 0
       - 2
       type: float
-      v: 0.229
+      v: 0.225
     cuff:
       cuff_len:
         default_prob: 0.7
@@ -828,20 +828,20 @@ design:
       - 0.2
       - 2
       type: float
-      v: 1.01
+      v: 0.988
     length:
       range:
       - 0.1
       - 1.15
       type: float
-      v: 0.781
+      v: 0.76
     opening_dir_mix:
       default_prob: 1.0
       range:
       - -0.9
       - 0.8
       type: float
-      v: 0.129
+      v: 0.136
     sleeve_angle:
       range:
       - 10
@@ -861,7 +861,7 @@ design:
       - 0.1
       - 0.4
       type: float
-      v: 0.25
+      v: 0.251
     standing_shoulder:
       default_prob: 0.8
       range:
@@ -874,7 +874,7 @@ design:
       - 4
       - 10
       type: float
-      v: 7.05
+      v: 6.94
   waistband:
     height:
       default_prob: 0.5

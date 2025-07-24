@@ -19,26 +19,26 @@ upperbody_garment:
     b_bezier_y: -1
     b_collar: CircleNeckHalf
     b_flip_curve: false
-    bc_angle: 92
+    bc_angle: 90
     bc_depth: -1
     component:
-      depth: 8
+      depth: 6
       hood_depth: -1
       hood_length: -1
       lapel_standing: false
-      style: null
+      style: Turtle
     f_bezier_x: -1
     f_bezier_y: -1
     f_collar: CircleNeckHalf
     f_flip_curve: false
-    fc_angle: 94
+    fc_angle: 109
     fc_depth: -1
     width: -1
   left:
     enable_asym: false
   meta:
     bottom: null
-    upper: Shirt
+    upper: FittedShirt
     wb: null
   shirt:
     flare: -1
@@ -54,7 +54,7 @@ upperbody_garment:
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 23
+    sleeve_angle: 49
     sleeveless: false
     smoothing_coeff: -1
     standing_shoulder: false

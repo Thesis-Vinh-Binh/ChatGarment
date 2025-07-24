@@ -537,7 +537,7 @@ design:
       - SkirtLevels
       - null
       type: select_null
-      v: PencilSkirt
+      v: Pants
     upper:
       default_prob: 0.3
       range:
@@ -602,20 +602,20 @@ design:
       - 0.5
       - 1.2
       type: float
-      v: 1.0
+      v: 0.992
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.3
+      v: 0.717
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 1.0
+      v: 0.936
     width:
       default_prob: 0.5
       range:
@@ -630,34 +630,34 @@ design:
       - 0
       - 0.9
       type: float
-      v: 0.0936
+      v: 0
     flare:
       default_prob: 0.3
       range:
       - 0.6
       - 1.5
       type: float
-      v: 1.01
+      v: 1.0
     front_slit:
       default_prob: 0.4
       range:
       - 0
       - 0.9
       type: float
-      v: 0.264
+      v: 0
     left_slit:
       default_prob: 0.6
       range:
       - 0
       - 0.9
       type: float
-      v: 0.00673
+      v: 0
     length:
       range:
       - 0.2
       - 0.95
       type: float
-      v: 0.505
+      v: 0.4
     low_angle:
       default_prob: 0.7
       range:
@@ -671,14 +671,14 @@ design:
       - 0
       - 0.9
       type: float
-      v: 0.0144
+      v: 0
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.883
+      v: 1
     style_side_cut:
       default_prob: 1.0
       range:
@@ -882,18 +882,18 @@ design:
       - -5
       - 15
       type: int
-      v: 0
+      v: 2
     waist:
       default_prob: 0.7
       range:
       - 1.0
       - 2
       type: float
-      v: 1.01
+      v: 1.0
     width:
       default_prob: 0.5
       range:
       - 0.1
       - 1.0
       type: float
-      v: 0.219
+      v: 0.31

@@ -537,7 +537,7 @@ design:
       - SkirtLevels
       - null
       type: select_null
-      v: Skirt2
+      v: Pants
     upper:
       default_prob: 0.3
       range:
@@ -608,14 +608,14 @@ design:
       - 0.2
       - 0.9
       type: float
-      v: 0.3
+      v: 0.472
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 1.0
+      v: 0.848
     width:
       default_prob: 0.5
       range:
@@ -729,34 +729,34 @@ design:
       - 0
       - 0.9
       type: float
-      v: 0.229
+      v: 0
     flare:
       default_prob: 0.5
       range:
       - 0
       - 20
       type: int
-      v: 19
+      v: 0
     length:
       range:
       - -0.2
       - 0.95
       type: float
-      v: 0.368
+      v: 0.2
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.812
+      v: 1
     ruffle:
       default_prob: 0.3
       range:
       - 1
       - 2
       type: float
-      v: 1.28
+      v: 1.3
   sleeve:
     armhole_shape:
       default_prob: 0.7
@@ -882,7 +882,7 @@ design:
       - -5
       - 15
       type: int
-      v: 0
+      v: 3
     waist:
       default_prob: 0.7
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.238
+      v: 0.197

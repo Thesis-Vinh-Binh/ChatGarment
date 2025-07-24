@@ -4,41 +4,38 @@ wholebody_garment:
     b_bezier_y: -1
     b_collar: CircleNeckHalf
     b_flip_curve: false
-    bc_angle: 93
+    bc_angle: 80
     bc_depth: -1
     component:
-      depth: 7
+      depth: 2
       hood_depth: -1
       hood_length: -1
-      lapel_standing: false
+      lapel_standing: true
       style: null
     f_bezier_x: -1
     f_bezier_y: -1
     f_collar: CircleNeckHalf
     f_flip_curve: false
-    fc_angle: 107
+    fc_angle: 79
     fc_depth: -1
     width: -1
-  flare-skirt:
-    asymm:
-      front_length: -1
-    cut:
-      add: false
-      depth: -1
-      place: -1
-      width: -1
-    length: -1
-    rise: -1
-    skirt-many-panels:
-      n_panels: 10
-      panel_curve: 0.15
-    suns: -1
   left:
     enable_asym: false
   meta:
-    bottom: SkirtCircle
-    upper: Shirt
-    wb: FittedWB
+    bottom: PencilSkirt
+    upper: FittedShirt
+    wb: null
+  pencil-skirt:
+    back_slit: -1
+    flare: -1
+    front_slit: -1
+    left_slit: -1
+    length: -1
+    low_angle: 0
+    right_slit: -1
+    rise: -1
+    style_side_cut: null
+    style_side_file: assets\img\Logo_adjusted.svg
   shirt:
     flare: -1
     length: -1
@@ -49,20 +46,12 @@ wholebody_garment:
     connect_ruffle: -1
     connecting_width: -1
     cuff:
-      cuff_len: -1
-      skirt_flare: -1
-      skirt_fraction: -1
-      skirt_ruffle: -1
-      top_ruffle: -1
-      type: CuffBand
+      type: null
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 22
+    sleeve_angle: 16
     sleeveless: true
     smoothing_coeff: -1
     standing_shoulder: false
     standing_shoulder_len: -1
-  waistband:
-    waist: -1
-    width: -1

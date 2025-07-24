@@ -1,10 +1,25 @@
-wholebody_garment:
+lowerbody_garment:
+  meta:
+    bottom: Pants
+    upper: null
+    wb: StraightWB
+  pants:
+    cuff:
+      type: null
+    flare: -1
+    length: -1
+    rise: -1
+    width: -1
+  waistband:
+    waist: -1
+    width: -1
+upperbody_garment:
   collar:
     b_bezier_x: -1
     b_bezier_y: -1
     b_collar: CircleNeckHalf
-    b_flip_curve: false
-    bc_angle: 73
+    b_flip_curve: true
+    bc_angle: 71
     bc_depth: -1
     component:
       depth: 3
@@ -14,17 +29,17 @@ wholebody_garment:
       style: SimpleLapel
     f_bezier_x: -1
     f_bezier_y: -1
-    f_collar: CircleNeckHalf
-    f_flip_curve: false
-    fc_angle: 77
+    f_collar: CircleArcNeckHalf
+    f_flip_curve: true
+    fc_angle: 81
     fc_depth: -1
     width: -1
   left:
     enable_asym: false
   meta:
     bottom: null
-    upper: Shirt
-    wb: FittedWB
+    upper: FittedShirt
+    wb: null
   shirt:
     flare: -1
     length: -1
@@ -40,15 +55,12 @@ wholebody_garment:
       skirt_fraction: -1
       skirt_ruffle: -1
       top_ruffle: -1
-      type: CuffBand
+      type: CuffSkirt
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 35
+    sleeve_angle: 33
     sleeveless: false
     smoothing_coeff: -1
     standing_shoulder: false
     standing_shoulder_len: -1
-  waistband:
-    waist: -1
-    width: -1

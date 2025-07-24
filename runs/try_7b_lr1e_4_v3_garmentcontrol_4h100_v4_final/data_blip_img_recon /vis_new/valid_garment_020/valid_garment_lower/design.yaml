@@ -553,7 +553,7 @@ design:
       - FittedWB
       - null
       type: select_null
-      v: null
+      v: FittedWB
   pants:
     cuff:
       cuff_len:
@@ -562,31 +562,31 @@ design:
         - 0.05
         - 0.9
         type: float
-        v: 0.1
+        v: 0.365
       skirt_flare:
         range:
         - 1
         - 2
         type: float
-        v: 1.2
+        v: 1.49
       skirt_fraction:
         range:
         - 0.1
         - 0.9
         type: float
-        v: 0.5
+        v: 0.541
       skirt_ruffle:
         range:
         - 1
         - 1.5
         type: float
-        v: 1.0
+        v: 1.25
       top_ruffle:
         range:
         - 1
         - 2
         type: float
-        v: 1.0
+        v: 1.51
       type:
         default_prob: 0.5
         range:
@@ -595,27 +595,27 @@ design:
         - CuffBandSkirt
         - null
         type: select_null
-        v: null
+        v: CuffBand
     flare:
       default_prob: 0.3
       range:
       - 0.5
       - 1.2
       type: float
-      v: 0.943
+      v: 0.929
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.519
+      v: 0.434
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.826
+      v: 0.834
     width:
       default_prob: 0.5
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.2
+      v: 0.227

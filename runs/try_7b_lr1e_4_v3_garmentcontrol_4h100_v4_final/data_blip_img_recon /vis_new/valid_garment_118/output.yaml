@@ -1,37 +1,34 @@
 lowerbody_garment:
   meta:
-    bottom: PencilSkirt
+    bottom: Pants
     upper: null
     wb: null
-  pencil-skirt:
-    back_slit: -1
+  pants:
+    cuff:
+      type: null
     flare: -1
-    front_slit: -1
-    left_slit: -1
     length: -1
-    low_angle: 0
-    right_slit: -1
     rise: -1
-    style_side_cut: null
+    width: -1
 upperbody_garment:
   collar:
     b_bezier_x: -1
     b_bezier_y: -1
     b_collar: CircleNeckHalf
     b_flip_curve: false
-    bc_angle: 74
+    bc_angle: 94
     bc_depth: -1
     component:
-      depth: 7
+      depth: 2
       hood_depth: -1
       hood_length: -1
       lapel_standing: true
-      style: SimpleLapel
+      style: Turtle
     f_bezier_x: -1
     f_bezier_y: -1
     f_collar: CircleArcNeckHalf
     f_flip_curve: false
-    fc_angle: 75
+    fc_angle: 71
     fc_depth: -1
     width: -1
   left:
@@ -50,11 +47,16 @@ upperbody_garment:
     connect_ruffle: -1
     connecting_width: -1
     cuff:
-      type: null
+      cuff_len: -1
+      skirt_flare: -1
+      skirt_fraction: -1
+      skirt_ruffle: -1
+      top_ruffle: -1
+      type: CuffSkirt
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 34
+    sleeve_angle: 10
     sleeveless: false
     smoothing_coeff: -1
     standing_shoulder: false

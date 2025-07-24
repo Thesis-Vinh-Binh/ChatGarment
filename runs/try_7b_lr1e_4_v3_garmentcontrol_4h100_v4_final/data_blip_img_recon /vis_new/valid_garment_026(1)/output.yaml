@@ -1,65 +1,49 @@
-lowerbody_garment:
-  meta:
-    bottom: Skirt2
-    upper: null
-    wb: StraightWB
-  skirt:
-    bottom_cut: -1
-    flare: 19
-    length: -1
-    rise: -1
-    ruffle: -1
-  waistband:
-    waist: -1
-    width: -1
-upperbody_garment:
+wholebody_garment:
   collar:
     b_bezier_x: -1
     b_bezier_y: -1
     b_collar: CircleNeckHalf
-    b_flip_curve: false
+    b_flip_curve: true
     bc_angle: 78
     bc_depth: -1
     component:
-      depth: 2
+      depth: 3
       hood_depth: -1
       hood_length: -1
       lapel_standing: true
-      style: null
+      style: SimpleLapel
     f_bezier_x: -1
     f_bezier_y: -1
-    f_collar: CircleNeckHalf
-    f_flip_curve: true
-    fc_angle: 77
+    f_collar: CircleArcNeckHalf
+    f_flip_curve: false
+    fc_angle: 89
     fc_depth: -1
     width: -1
   left:
     enable_asym: false
   meta:
     bottom: null
-    upper: FittedShirt
-    wb: null
+    upper: Shirt
+    wb: FittedWB
   shirt:
     flare: -1
     length: -1
-    strapless: true
+    strapless: false
     width: -1
   sleeve:
     armhole_shape: ArmholeCurve
     connect_ruffle: -1
     connecting_width: -1
     cuff:
-      cuff_len: -1
-      skirt_flare: -1
-      skirt_fraction: -1
-      skirt_ruffle: -1
-      top_ruffle: -1
-      type: CuffBandSkirt
+      type: null
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 21
+    sleeve_angle: 34
     sleeveless: true
     smoothing_coeff: -1
     standing_shoulder: false
     standing_shoulder_len: -1
+  waistband:
+    waist: -1
+    width: -1

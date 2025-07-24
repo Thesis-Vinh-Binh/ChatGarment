@@ -143,7 +143,7 @@ design:
         - 0.1
         - 0.9
         type: float
-        v: 0.5
+        v: 0.503
     cut:
       add:
         default_prob: 0.6
@@ -158,39 +158,39 @@ design:
         - 0.05
         - 0.95
         type: float
-        v: 0.5
+        v: 0.504
       place:
         range:
         - -1
         - 1
         type: float
-        v: -0.5
+        v: -0.188
       width:
         range:
         - 0.05
         - 0.4
         type: float
-        v: 0.1
+        v: 0.212
     length:
       range:
       - -0.2
       - 0.95
       type: float
-      v: 0.2
+      v: 0.384
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 1
+      v: 0.852
     skirt-many-panels:
       n_panels:
         range:
         - 4
         - 15
         type: int
-        v: 4
+        v: 15
       panel_curve:
         range:
         - -0.35
@@ -202,13 +202,13 @@ design:
         - 0.35
         - 0.45
         type: select
-        v: 0
+        v: 0.25
     suns:
       range:
       - 0.1
       - 1.95
       type: float
-      v: 0.75
+      v: 0.562
   godet-skirt:
     base:
       default_prob: 0.7
@@ -537,7 +537,7 @@ design:
       - SkirtLevels
       - null
       type: select_null
-      v: Pants
+      v: SkirtManyPanels
     upper:
       default_prob: 0.3
       range:
@@ -553,7 +553,7 @@ design:
       - FittedWB
       - null
       type: select_null
-      v: FittedWB
+      v: StraightWB
   pants:
     cuff:
       cuff_len:
@@ -602,20 +602,20 @@ design:
       - 0.5
       - 1.2
       type: float
-      v: 0.957
+      v: 1.0
     length:
       range:
       - 0.2
       - 0.9
       type: float
-      v: 0.566
+      v: 0.3
     rise:
       default_prob: 0.3
       range:
       - 0.5
       - 1
       type: float
-      v: 0.877
+      v: 1.0
     width:
       default_prob: 0.5
       range:
@@ -896,4 +896,4 @@ design:
       - 0.1
       - 1.0
       type: float
-      v: 0.213
+      v: 0.255

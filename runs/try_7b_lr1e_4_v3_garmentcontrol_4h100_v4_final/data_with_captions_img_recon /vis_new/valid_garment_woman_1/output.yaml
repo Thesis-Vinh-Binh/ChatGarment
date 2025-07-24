@@ -1,0 +1,68 @@
+wholebody_garment:
+  collar:
+    b_bezier_x: -1
+    b_bezier_y: -1
+    b_collar: CircleNeckHalf
+    b_flip_curve: false
+    bc_angle: 93
+    bc_depth: -1
+    component:
+      depth: 7
+      hood_depth: -1
+      hood_length: -1
+      lapel_standing: false
+      style: null
+    f_bezier_x: -1
+    f_bezier_y: -1
+    f_collar: CircleNeckHalf
+    f_flip_curve: false
+    fc_angle: 107
+    fc_depth: -1
+    width: -1
+  flare-skirt:
+    asymm:
+      front_length: -1
+    cut:
+      add: false
+      depth: -1
+      place: -1
+      width: -1
+    length: -1
+    rise: -1
+    skirt-many-panels:
+      n_panels: 10
+      panel_curve: 0.15
+    suns: -1
+  left:
+    enable_asym: false
+  meta:
+    bottom: SkirtCircle
+    upper: Shirt
+    wb: FittedWB
+  shirt:
+    flare: -1
+    length: -1
+    strapless: false
+    width: -1
+  sleeve:
+    armhole_shape: ArmholeCurve
+    connect_ruffle: -1
+    connecting_width: -1
+    cuff:
+      cuff_len: -1
+      skirt_flare: -1
+      skirt_fraction: -1
+      skirt_ruffle: -1
+      top_ruffle: -1
+      type: CuffBand
+    end_width: -1
+    length: -1
+    opening_dir_mix: -1
+    sleeve_angle: 22
+    sleeveless: true
+    smoothing_coeff: -1
+    standing_shoulder: false
+    standing_shoulder_len: -1
+  waistband:
+    waist: -1
+    width: -1

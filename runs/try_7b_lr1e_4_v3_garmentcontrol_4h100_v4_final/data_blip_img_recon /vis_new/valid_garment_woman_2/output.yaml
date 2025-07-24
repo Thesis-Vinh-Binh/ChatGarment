@@ -1,18 +1,20 @@
 lowerbody_garment:
   meta:
-    bottom: PencilSkirt
+    bottom: Pants
     upper: null
     wb: FittedWB
-  pencil-skirt:
-    back_slit: -1
+  pants:
+    cuff:
+      cuff_len: -1
+      skirt_flare: -1
+      skirt_fraction: -1
+      skirt_ruffle: -1
+      top_ruffle: -1
+      type: CuffBand
     flare: -1
-    front_slit: -1
-    left_slit: -1
     length: -1
-    low_angle: 0
-    right_slit: -1
     rise: -1
-    style_side_cut: null
+    width: -1
   waistband:
     waist: -1
     width: -1
@@ -22,10 +24,10 @@ upperbody_garment:
     b_bezier_y: -1
     b_collar: CircleNeckHalf
     b_flip_curve: false
-    bc_angle: 79
+    bc_angle: 88
     bc_depth: -1
     component:
-      depth: 2
+      depth: 3
       hood_depth: -1
       hood_length: -1
       lapel_standing: true
@@ -34,7 +36,7 @@ upperbody_garment:
     f_bezier_y: -1
     f_collar: CircleNeckHalf
     f_flip_curve: false
-    fc_angle: 107
+    fc_angle: 89
     fc_depth: -1
     width: -1
   left:
@@ -53,12 +55,17 @@ upperbody_garment:
     connect_ruffle: -1
     connecting_width: -1
     cuff:
-      type: null
+      cuff_len: -1
+      skirt_flare: -1
+      skirt_fraction: -1
+      skirt_ruffle: -1
+      top_ruffle: -1
+      type: CuffBand
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 38
-    sleeveless: false
+    sleeve_angle: 28
+    sleeveless: true
     smoothing_coeff: -1
     standing_shoulder: false
     standing_shoulder_len: -1

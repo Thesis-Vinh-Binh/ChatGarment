@@ -6,14 +6,14 @@ design:
       - 0.05
       - 0.95
       type: float
-      v: 0.246
+      v: 0.252
     b_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.173
+      v: 0.162
     b_collar:
       default_prob: 0.8
       range:
@@ -25,7 +25,7 @@ design:
       - CircleArcNeckHalf
       - Bezier2NeckHalf
       type: select
-      v: CircleNeckHalf
+      v: SquareNeckHalf
     b_flip_curve:
       default_prob: 0.8
       range:
@@ -38,28 +38,28 @@ design:
       - 70
       - 110
       type: int
-      v: 95
+      v: 79
     bc_depth:
       default_prob: 0.4
       range:
       - 0
       - 2
       type: float
-      v: 0.0
+      v: 0.0344
     component:
       depth:
         range:
         - 2
         - 8
         type: int
-        v: 2
+        v: 8
       hood_depth:
         default_prob: 0.6
         range:
         - 1
         - 2
         type: float
-        v: 1.04
+        v: 1.03
       hood_length:
         default_prob: 0.6
         range:
@@ -72,7 +72,7 @@ design:
         - true
         - false
         type: bool
-        v: false
+        v: true
       style:
         default_prob: 0.6
         range:
@@ -81,21 +81,21 @@ design:
         - Hood2Panels
         - null
         type: select_null
-        v: Turtle
+        v: null
     f_bezier_x:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.322
+      v: 0.31
     f_bezier_y:
       default_prob: 0.4
       range:
       - 0.05
       - 0.95
       type: float
-      v: 0.542
+      v: 0.549
     f_collar:
       default_prob: 0.4
       range:
@@ -120,21 +120,21 @@ design:
       - 70
       - 110
       type: int
-      v: 109
+      v: 80
     fc_depth:
       default_prob: 0.3
       range:
       - 0.3
       - 2
       type: float
-      v: 0.448
+      v: 0.438
     width:
       default_prob: 0.4
       range:
       - -0.5
       - 1
       type: float
-      v: 0.197
+      v: 0.235
   flare-skirt:
     asymm:
       front_length:
@@ -545,7 +545,7 @@ design:
       - Shirt
       - null
       type: select_null
-      v: FittedShirt
+      v: Shirt
     wb:
       default_prob: 0.5
       range:
@@ -693,7 +693,7 @@ design:
       - 0.7
       - 1.6
       type: float
-      v: 1.0
+      v: 0.997
     length:
       default_prob: 0.7
       range:
@@ -721,7 +721,7 @@ design:
       - 1.0
       - 1.3
       type: float
-      v: 1.06
+      v: 1.05
   skirt:
     bottom_cut:
       default_prob: 0.3
@@ -765,21 +765,21 @@ design:
       - ArmholeAngle
       - ArmholeCurve
       type: select
-      v: ArmholeCurve
+      v: ArmholeSquare
     connect_ruffle:
       default_prob: 0.4
       range:
       - 1
       - 2
       type: float
-      v: 1.19
+      v: 1.16
     connecting_width:
       default_prob: 0.6
       range:
       - 0
       - 2
       type: float
-      v: 0.221
+      v: 0.207
     cuff:
       cuff_len:
         default_prob: 0.7
@@ -828,26 +828,26 @@ design:
       - 0.2
       - 2
       type: float
-      v: 1.03
+      v: 0.963
     length:
       range:
       - 0.1
       - 1.15
       type: float
-      v: 0.6
+      v: 0.455
     opening_dir_mix:
       default_prob: 1.0
       range:
       - -0.9
       - 0.8
       type: float
-      v: 0.123
+      v: 0.129
     sleeve_angle:
       range:
       - 10
       - 50
       type: int
-      v: 49
+      v: 41
     sleeveless:
       default_prob: 0.7
       range:
@@ -861,7 +861,7 @@ design:
       - 0.1
       - 0.4
       type: float
-      v: 0.255
+      v: 0.252
     standing_shoulder:
       default_prob: 0.8
       range:

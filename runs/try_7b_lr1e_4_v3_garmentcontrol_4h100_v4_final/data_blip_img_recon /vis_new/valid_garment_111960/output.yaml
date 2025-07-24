@@ -1,16 +1,30 @@
-lowerbody_garment:
-  levels-skirt:
-    base: PencilSkirt
-    base_length_frac: -1
-    length: -1
-    level: AsymmSkirtCircle
-    level_ruffle: -1
-    num_levels: 1
-    rise: -1
+wholebody_garment:
+  collar:
+    b_bezier_x: -1
+    b_bezier_y: -1
+    b_collar: CircleNeckHalf
+    b_flip_curve: false
+    bc_angle: 80
+    bc_depth: -1
+    component:
+      depth: 8
+      hood_depth: -1
+      hood_length: -1
+      lapel_standing: true
+      style: SimpleLapel
+    f_bezier_x: -1
+    f_bezier_y: -1
+    f_collar: CircleNeckHalf
+    f_flip_curve: false
+    fc_angle: 79
+    fc_depth: -1
+    width: -1
+  left:
+    enable_asym: false
   meta:
-    bottom: SkirtLevels
-    upper: null
-    wb: StraightWB
+    bottom: PencilSkirt
+    upper: FittedShirt
+    wb: null
   pencil-skirt:
     back_slit: -1
     flare: -1
@@ -21,44 +35,14 @@ lowerbody_garment:
     right_slit: -1
     rise: -1
     style_side_cut: null
-    style_side_file: assets\img\test_shape.svg
-  waistband:
-    waist: -1
-    width: -1
-upperbody_garment:
-  collar:
-    b_bezier_x: -1
-    b_bezier_y: -1
-    b_collar: CircleNeckHalf
-    b_flip_curve: false
-    bc_angle: 106
-    bc_depth: -1
-    component:
-      depth: 8
-      hood_depth: -1
-      hood_length: -1
-      lapel_standing: false
-      style: null
-    f_bezier_x: -1
-    f_bezier_y: -1
-    f_collar: SquareNeckHalf
-    f_flip_curve: false
-    fc_angle: 103
-    fc_depth: -1
-    width: -1
-  left:
-    enable_asym: false
-  meta:
-    bottom: null
-    upper: FittedShirt
-    wb: null
+    style_side_file: assets\img\Logo_adjusted.svg
   shirt:
     flare: -1
     length: -1
     strapless: false
     width: -1
   sleeve:
-    armhole_shape: ArmholeCurve
+    armhole_shape: ArmholeSquare
     connect_ruffle: -1
     connecting_width: -1
     cuff:
@@ -67,11 +51,11 @@ upperbody_garment:
       skirt_fraction: -1
       skirt_ruffle: -1
       top_ruffle: -1
-      type: CuffBandSkirt
+      type: CuffSkirt
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 31
+    sleeve_angle: 12
     sleeveless: false
     smoothing_coeff: -1
     standing_shoulder: false

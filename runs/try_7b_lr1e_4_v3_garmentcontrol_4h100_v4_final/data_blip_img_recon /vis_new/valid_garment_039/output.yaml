@@ -1,34 +1,37 @@
 lowerbody_garment:
   meta:
-    bottom: Pants
+    bottom: PencilSkirt
     upper: null
     wb: null
-  pants:
-    cuff:
-      type: null
+  pencil-skirt:
+    back_slit: -1
     flare: -1
+    front_slit: -1
+    left_slit: -1
     length: -1
+    low_angle: 0
+    right_slit: -1
     rise: -1
-    width: -1
+    style_side_cut: null
 upperbody_garment:
   collar:
     b_bezier_x: -1
     b_bezier_y: -1
     b_collar: CircleNeckHalf
-    b_flip_curve: false
-    bc_angle: 80
+    b_flip_curve: true
+    bc_angle: 105
     bc_depth: -1
     component:
-      depth: 3
+      depth: 4
       hood_depth: -1
       hood_length: -1
       lapel_standing: true
-      style: null
+      style: SimpleLapel
     f_bezier_x: -1
     f_bezier_y: -1
-    f_collar: CircleNeckHalf
+    f_collar: CircleArcNeckHalf
     f_flip_curve: false
-    fc_angle: 102
+    fc_angle: 89
     fc_depth: -1
     width: -1
   left:
@@ -43,7 +46,7 @@ upperbody_garment:
     strapless: false
     width: -1
   sleeve:
-    armhole_shape: ArmholeAngle
+    armhole_shape: ArmholeCurve
     connect_ruffle: -1
     connecting_width: -1
     cuff:
@@ -51,8 +54,8 @@ upperbody_garment:
     end_width: -1
     length: -1
     opening_dir_mix: -1
-    sleeve_angle: 28
-    sleeveless: true
+    sleeve_angle: 27
+    sleeveless: false
     smoothing_coeff: -1
-    standing_shoulder: true
+    standing_shoulder: false
     standing_shoulder_len: -1

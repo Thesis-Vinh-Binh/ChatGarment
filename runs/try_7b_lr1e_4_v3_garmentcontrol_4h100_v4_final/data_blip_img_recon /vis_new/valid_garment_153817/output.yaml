@@ -2,7 +2,7 @@ lowerbody_garment:
   meta:
     bottom: Pants
     upper: null
-    wb: StraightWB
+    wb: FittedWB
   pants:
     cuff:
       type: null
