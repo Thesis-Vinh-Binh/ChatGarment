@@ -11,6 +11,7 @@ dist
 
 # Data
 !**/alpaca-data-conversation.json
+runs/try_lr1e_4_generator_wildimg/
 
 # Editor
 .idea

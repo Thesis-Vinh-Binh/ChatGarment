@@ -80,27 +80,39 @@ class LazyImageDataset(Dataset):
                       if (item.endswith('.png') or item.endswith('.jpg') or item.endswith('.jfif'))]
         print(f'total images: {len(all_images)}')
         self.tokenizer = tokenizer
-        self.captions = {}
-        for item in _dir:
-            if item.endswith('csv'):
-                self.captions = pd.read_csv(os.path.join(imagefolder, item))
-                break
+        
+        # Load captions and create a dictionary for efficient lookup
+        captions_df = pd.read_csv(os.path.join(imagefolder, "captions.csv"))
+        self.caption_dict = dict(zip(captions_df['filename'], captions_df['caption']))
+        
+        # Verify all images have captions
+        missing_captions = [img for img in all_images if img not in self.caption_dict]
+        if missing_captions:
+            print(f"Warning: {len(missing_captions)} images missing captions: {missing_captions[:5]}")
+        
         self.all_images = all_images
         self.data_args = data_args
 
     def __len__(self):
         return len(self.all_images)
 
-    def __getitem__(self, i) -> Dict[str, torch.Tensor]:
+    def __getitem__(self, i) -> Dict[str, torch.Tensor]: 
 
         image_file = os.path.join(self.imagefolder, self.all_images[i])
         image_folder = self.data_args.image_folder
         processor = self.data_args.image_processor
         image = Image.open(os.path.join(image_folder, image_file)).convert('RGB')
-        caption = ""
-        for index, row in self.captions.iterrows():
-            if (row['filename'] == self.all_images[i]):
-                caption = row['predicted']
+        
+        # Use dictionary lookup instead of iterating through DataFrame
+        caption = self.caption_dict.get(self.all_images[i], "")
+        
+        # Debug: Print caption mapping for first few items
+        if i < 3:
+            print(f"Image {i}: {self.all_images[i]} -> Caption: {caption[:100]}...")
+        
+        if not caption:
+            print(f"Warning: No caption found for image {self.all_images[i]}")
+        
         if self.data_args.image_aspect_ratio == 'pad':
             def expand2square(pil_img, background_color):
                 width, height = pil_img.size
@@ -216,7 +228,7 @@ def ask_gpt4o(image_path, client):
                     },
                 ],
             }
-        ],
+    ],
         max_tokens=300,
     )
 
@@ -390,84 +402,73 @@ def main(args):
 
         image_path = data_item['image_path']
         description = data_item['caption']
-        print('image_path', image_path)
-        print('caption', description)
-        # try:
-        #     gpt_4o_description, text_labels = ask_gpt4o(image_path, client)
-        # except:
-        #     continue
-        # gpt_4o_description, text_labels = ask_gpt4o(image_path, client)
         
-
         answers = []
-        question2 = 'Can you estimate the outfit sewing pattern code based on the image and garment geometry description?'
-        questions = [question2]
+        question2 = 'Can you estimate the outfit sewing pattern code based on the image and the following geometry description?'
         
-        for k in range(len(questions)):
-            conv = conversation_lib.conv_templates[model_args.version].copy()
-            conv.messages = []
-           
-            prompt = DEFAULT_IMAGE_TOKEN + "\n" + question2 + "\n" + description
-            print('prompt', prompt)
-            
-            conv.append_message(conv.roles[0], prompt)
-            conv.append_message(conv.roles[1], None)
-            prompt = conv.get_prompt()
+        conv = conversation_lib.conv_templates[model_args.version].copy()
+        conv.messages = []
+        
+        prompt = DEFAULT_IMAGE_TOKEN + "\n" + question2 + "\n" + description.replace('upper garment', 'upperbody_garment').replace('lower garment', 'lowerbody_garment')
+        print('prompt', prompt)
+        
+        conv.append_message(conv.roles[0], prompt)
+        conv.append_message(conv.roles[1], None)
+        prompt = conv.get_prompt()
 
-            image_clip = data_item['image_trivial']
-            image_clip = image_clip.unsqueeze(0).to(device)
-            assert args.precision == "bf16"
-            image_clip = image_clip.bfloat16()
-            
-            image = image_clip
+        image_clip = data_item['image_trivial']
+        image_clip = image_clip.unsqueeze(0).to(device)
+        assert args.precision == "bf16"
+        image_clip = image_clip.bfloat16()
+        
+        image = image_clip
 
-            input_ids = tokenizer_image_token(prompt, tokenizer, return_tensors="pt")
-            input_ids = input_ids.unsqueeze(0).to(device)
+        input_ids = tokenizer_image_token(prompt, tokenizer, return_tensors="pt")
+        input_ids = input_ids.unsqueeze(0).to(device)
 
-            output_ids, float_preds, seg_token_mask = model.evaluate(
-                image_clip,
-                image,
-                input_ids,
-                max_new_tokens=2048,
-                tokenizer=tokenizer,
-            )
+        output_ids, float_preds, seg_token_mask = model.evaluate(
+            image_clip,
+            image,
+            input_ids,
+            max_new_tokens=2048,
+            tokenizer=tokenizer,
+        )
 
-            output_ids = output_ids[0, 1:]
-            text_output = tokenizer.decode(output_ids, skip_special_tokens=False).strip().replace("</s>", "")
-            
-            print(f"text_output:    ???{text_output}???")
-            text_output = text_output.replace('[STARTS]', '').replace('[SEG]', '').replace('[ENDS]', '')
-            answers.append(text_output)
+        output_ids = output_ids[0, 1:]
+        text_output = tokenizer.decode(output_ids, skip_special_tokens=False).strip().replace("</s>", "")
+        
+        print(f"text_output:    ???{text_output}???")
+        text_output = text_output.replace('[STARTS]', '').replace('[SEG]', '').replace('[ENDS]', '')
+        answers.append(text_output)
 
-            if True:
-                garment_id = image_path.split('/')[-1]
-                garment_id = garment_id.split('.')[0]
-                json_output = repair_json(text_output, return_objects=True)
+        garment_id = image_path.split('/')[-1]
+        garment_id = garment_id.split('.')[0]
+        json_output = repair_json(text_output, return_objects=True)
 
-                saved_dir = os.path.join(parent_folder, 'vis_new', f'valid_garment_{garment_id}')
-                if not os.path.exists(saved_dir):
-                    os.makedirs(saved_dir)
-                
-                with open(os.path.join(saved_dir, 'output.txt'), 'w') as f:
-                    # f.write(str(text_labels))
-                    f.write('\n\n')
-                    f.write(description)
-                    f.write('\n\n')
-                    f.write(text_output)
-                    f.write('\n\n')
-                    f.write(str(json_output))
-                
-                with open(os.path.join(saved_dir, 'output.yaml'), 'w') as f:
-                    yaml.dump(json_output, f)
+        saved_dir = os.path.join(parent_folder, 'vis_new', f'valid_garment_{garment_id}')
+        if not os.path.exists(saved_dir):
+            os.makedirs(saved_dir)
+        
+        with open(os.path.join(saved_dir, 'output.txt'), 'w') as f:
+            # f.write(str(text_labels))
+            f.write('\nDESCRIPTION\n')
+            f.write(description)
+            f.write('\nTEXT OUTPUT\n')
+            f.write(text_output)
+            f.write('\nJSON OUTPUT\n')
+            f.write(str(json_output))
+        
+        with open(os.path.join(saved_dir, 'output.yaml'), 'w') as f:
+            yaml.dump(json_output, f)
 
-                output_dir = saved_dir
-                all_output_dir.append(output_dir)
-                shutil.copy(image_path, os.path.join(output_dir, f'gt_image.png'))
+        output_dir = saved_dir
+        all_output_dir.append(output_dir)
+        shutil.copy(image_path, os.path.join(output_dir, f'gt_image.png'))
 
-                try:
-                    all_json_spec_files = run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir)
-                except Exception as e:
-                    print('Error:', e)
+        try:
+            all_json_spec_files = run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir)
+        except Exception as e:
+            print('Error:', e)
         
     saved_json_Path = os.path.join(parent_folder, 'vis_new', 'all_json_spec_files.json')
     with open(saved_json_Path, 'w') as f:
