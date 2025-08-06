@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export LD_LIBRARY_PATH=/usr/local/cuda-12.8/lib64
-export PATH=$PATH:/usr/local/cuda-12.8/bin
-export CUDA_HOME=/usr/local/cuda-12.8
+export LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64
+export PATH=$PATH:/usr/local/cuda-12.1/bin
+export CUDA_HOME=/usr/local/cuda-12.1
 
 export CPATH=/venv/chatgarment/lib/python3.10/site-packages/nvidia/cudnn/include
 export C_INCLUDE_PATH=/venv/chatgarment/lib/python3.10/site-packages/nvidia/cudnn/include
