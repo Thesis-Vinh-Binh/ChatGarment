@@ -12,10 +12,13 @@ dist
 # Data
 !**/alpaca-data-conversation.json
 runs/try_lr1e_4_generator_wildimg/
+runs/*
 
 # Editor
 .idea
 *.swp
+
+test.py
 
 # Other
 .DS_Store

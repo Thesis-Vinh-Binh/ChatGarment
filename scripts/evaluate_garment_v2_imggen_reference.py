@@ -43,6 +43,7 @@ from openai import OpenAI
 import pandas as pd
 
 os.environ["MASTER_PORT"] = "23499"
+NUM_CLOSEST_IMAGES = 2
 
 
 def find_all_linear_names(model, lora_target_modules=['q_proj', 'v_proj']):
@@ -83,8 +84,9 @@ class LazyImageDataset(Dataset):
         
         # Load captions and create a dictionary for efficient lookup
         captions_df = pd.read_csv(os.path.join(imagefolder, "captions.csv"))
+        closest_images_df = pd.read_csv(os.path.join(imagefolder, "closest_images.csv"))
         self.caption_dict = dict(zip(captions_df['filename'], captions_df['caption']))
-        
+        self.closest_images_dict = dict(zip(closest_images_df['input_image'], closest_images_df['closest_images']))
         # Verify all images have captions
         missing_captions = [img for img in all_images if img not in self.caption_dict]
         if missing_captions:
@@ -105,6 +107,10 @@ class LazyImageDataset(Dataset):
         
         # Use dictionary lookup instead of iterating through DataFrame
         caption = self.caption_dict.get(self.all_images[i], "")
+        closest_images_path = eval(self.closest_images_dict.get(image_file, []))
+        closest_images = [image]
+        for i in range(min(NUM_CLOSEST_IMAGES, len(closest_images_path))):
+            closest_images.append(Image.open(closest_images_path[i]))
         
         # Debug: Print caption mapping for first few items
         if i < 3:
@@ -126,13 +132,17 @@ class LazyImageDataset(Dataset):
                     result = Image.new(pil_img.mode, (height, height), background_color)
                     result.paste(pil_img, ((height - width) // 2, 0))
                     return result
-            image = expand2square(image, tuple(int(x*255) for x in processor.image_mean))
-            image = processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
+            closest_images = [expand2square(i, tuple(int(x*255) for x in processor.image_mean)) for i in closest_images]
+            closest_images = processor.preprocess(closest_images, return_tensors='pt')['pixel_values']
+            # image = processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
+            # closest_images = [processor.preprocess(i, return_tensors='pt')['pixel_values'][0] for i in closest_images]
+
         
         data_dict = {}
-        data_dict['image'] = image
+        data_dict['image'] = closest_images
         data_dict['image_path'] = os.path.join(image_folder, image_file)
         data_dict['caption'] = caption
+        # data_dict['closest_images'] = closest_images
 
         return data_dict
 
@@ -365,7 +375,7 @@ def main(args):
         dataset_name = data_args.data_path_eval.split('/')[-1]
 
     args.exp_name = resume_path.split('/')[-2]
-    parent_folder = os.path.join(args.log_base_dir, args.exp_name, f'{dataset_name}_cg_blip')
+    parent_folder = os.path.join(args.log_base_dir, args.exp_name, f'{dataset_name}_cg_reference')
     if not os.path.exists(parent_folder):
         os.makedirs(parent_folder)
 
@@ -382,7 +392,7 @@ def main(args):
         description = data_item['caption']
         
         answers = []
-        question2 = 'Can you estimate the outfit sewing pattern code based on the image and the following geometry description?'
+        question2 = f'Can you estimate the outfit sewing pattern code based on the image and the following geometry description, and I will provide you {NUM_CLOSEST_IMAGES} closest images to the input image as a reference?'
         
         conv = conversation_lib.conv_templates[model_args.version].copy()
         conv.messages = []
@@ -394,7 +404,7 @@ def main(args):
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
 
-        image_clip = data_item['image']
+        image_clip = data_item['image'] 
         image_clip = image_clip.unsqueeze(0).to(device)
         assert args.precision == "bf16"
         image_clip = image_clip.bfloat16()
