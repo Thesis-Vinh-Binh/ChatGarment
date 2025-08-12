@@ -1,0 +1,33 @@
+  File "/workspace/ChatGarment/llava/train/train_mem_garmentcode_outfit.py", line 4, in <module>
+    train(attn_implementation="flash_attention_2")
+  File "/workspace/ChatGarment/llava/train/train_aodai.py", line 1328, in train
+    train_iter = train_epoch(
+  File "/workspace/ChatGarment/llava/train/train_aodai.py", line 1004, in train_epoch
+    input_dict = next(train_iter)
+  File "/venv/chatgarment/lib/python3.10/site-packages/deepspeed/runtime/dataloader.py", line 124, in __next__
+    return next(self.data)
+  File "/venv/chatgarment/lib/python3.10/site-packages/deepspeed/runtime/dataloader.py", line 157, in <genexpr>
+    self.data = (x for x in self.dataloader)
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1345, in _next_data
+    return self._process_data(data)
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1371, in _process_data
+    data.reraise()
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/_utils.py", line 694, in reraise
+    raise exception
+RuntimeError: Caught RuntimeError in pin memory thread for device 0.
+Original Traceback (most recent call last):
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 37, in do_one_step
+    data = pin_memory(data, device)
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 63, in pin_memory
+    return type(data)({k: pin_memory(sample, device) for k, sample in data.items()})  # type: ignore[call-arg]
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 63, in <dictcomp>
+    return type(data)({k: pin_memory(sample, device) for k, sample in data.items()})  # type: ignore[call-arg]
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 73, in pin_memory
+    return type(data)([pin_memory(sample, device) for sample in data])  # type: ignore[call-arg]
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 73, in <listcomp>
+    return type(data)([pin_memory(sample, device) for sample in data])  # type: ignore[call-arg]
+  File "/venv/chatgarment/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 58, in pin_memory
+    return data.pin_memory(device)
+RuntimeError: unsupported operation: more than one element of the written-to tensor refers to a single memory location. Please clone() the tensor before performing the operation.

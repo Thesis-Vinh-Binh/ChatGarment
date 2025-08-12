@@ -12,14 +12,14 @@ export LD_LIBRARY_PATH=$LIBRARY_PATH:$LD_LIBRARY_PATH
 export EGL_DEVICE_ID=$GPU_DEVICE_ORDINAL
 # export TCNN_CUDA_ARCHITECTURES=80
 
-deepspeed llava/train/train_mem_garmentcode_outfit.py \
+deepspeed scripts/evaluate_garment_v2_imggen_retrieval.py \
     --lora_enable True --lora_r 128 --lora_alpha 256 --mm_projector_lr 2e-5 \
     --deepspeed ./scripts/zero2.json \
     --model_name_or_path liuhaotian/llava-v1.5-7b \
     --version v1 \
     --data_path ./ \
-    --data_path_eval ./ \
-    --image_folder /workspace/ao_dai_example/ \
+    --data_path_eval $1 \
+    --image_folder ./ \
     --vision_tower openai/clip-vit-large-patch14-336 \
     --mm_projector_type mlp2x_gelu \
     --mm_vision_select_layer -2 \
@@ -30,7 +30,7 @@ deepspeed llava/train/train_mem_garmentcode_outfit.py \
     --bf16 True \
     --output_dir ./checkpoints/llava-v1.5-7b-task-lora \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 3 \
+    --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
@@ -45,7 +45,7 @@ deepspeed llava/train/train_mem_garmentcode_outfit.py \
     --tf32 True \
     --model_max_length 3072 \
     --gradient_checkpointing True \
-    --dataloader_num_workers 3 \
+    --dataloader_num_workers 4 \
     --lazy_preprocess True \
     --report_to wandb
 

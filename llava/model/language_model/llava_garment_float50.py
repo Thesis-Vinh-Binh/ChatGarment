@@ -50,12 +50,12 @@ class GarmentGPTFloat50ForCausalLM(LlavaLlamaForCausalLM):
         self.seg_token_idx = kwargs.pop("seg_token_idx")
 
         # self.float_layer = nn.Linear(config.hidden_size, 1)
-        self.last_dim = 76
+        self.last_dim = 1 # for ao dai
         self.float_layer = nn.Sequential(
             nn.Linear(config.hidden_size, config.hidden_size),
             nn.ReLU(),
             nn.Linear(config.hidden_size, self.last_dim)
-        )
+        ) # the float layer 
         self.float_layer.train()
         for p in self.float_layer.parameters():
             p.requires_grad = True
@@ -129,6 +129,7 @@ class GarmentGPTFloat50ForCausalLM(LlavaLlamaForCausalLM):
 
             pred_embeddings = last_hidden_state[seg_token_mask]
             seg_token_counts = seg_token_mask.int().sum(-1)  # [bs, ]
+            print(f'seg_token_counts: {seg_token_counts}')
             seg_token_offset = seg_token_counts.cumsum(-1)
             seg_token_offset = torch.cat(
                 [torch.zeros(1).long().cuda(), seg_token_offset], dim=0
@@ -138,12 +139,15 @@ class GarmentGPTFloat50ForCausalLM(LlavaLlamaForCausalLM):
             for i in range(len(seg_token_offset) - 1):
                 start_i, end_i = seg_token_offset[i], seg_token_offset[i + 1]
                 pred_embeddings_.append(pred_embeddings[start_i:end_i])
+                print(f'pred_embeddings_.shape: {len(pred_embeddings_)}')
 
             pred_embeddings = pred_embeddings_
             text_embeddings = torch.cat(pred_embeddings, dim=0)
 
             if float_labels is not None:
                 float_labels = torch.cat(float_labels, dim=0).type(text_embeddings.dtype)
+                print(f'Float labels shape: {float_labels.shape}')
+                print(f'Text embeddings shape: {text_embeddings.shape}')
                 hmr_loss = torch.abs(text_embeddings.reshape(-1, self.last_dim) - float_labels.reshape(-1, self.last_dim))
                 if float_weight is not None:
                     float_weight = torch.cat(float_weight, dim=0).type(text_embeddings.dtype)
