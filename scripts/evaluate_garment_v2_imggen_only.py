@@ -2,8 +2,6 @@ import argparse
 import copy
 import os
 import sys
-import json
-import base64
 
 import cv2
 import numpy as np
@@ -17,32 +15,29 @@ import tokenizers
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
+from llava.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from torch.utils.data import Dataset
 
+from llava import conversation as conversation_lib
+from llava.model import *
+from llava.mm_utils import tokenizer_image_token
 import deepspeed
 from functools import partial
 from easydict import EasyDict as edict
 from typing import Dict, Optional, Sequence, List
 
 from PIL import Image
-import time
 from torch.utils.tensorboard import SummaryWriter
+import tqdm
 import shutil
-import yaml
-import json
-from llava.constants import DEFAULT_IMAGE_TOKEN
-from llava import conversation as conversation_lib
-from llava.model import *
-from llava.mm_utils import tokenizer_image_token
 from llava.json_fixer import repair_json
-from llava.prompts_utils import get_text_labels
+
 from llava.train.train_garmentcode_outfit import ModelArguments, DataArguments, TrainingArguments, rank0_print
 from llava.garment_utils_v2 import run_garmentcode_parser_float50
-from fashsketch.utils import fix_based_on_description
-import os
 
-from openai import OpenAI
-import pandas as pd
+import json
+from tqdm import tqdm
+import re 
 
 os.environ["MASTER_PORT"] = "23499"
 
@@ -69,7 +64,7 @@ def find_all_linear_names(model, lora_target_modules=['q_proj', 'v_proj']):
 
 
 class LazyImageDataset(Dataset):
-
+    """Dataset for supervised fine-tuning."""
 
     def __init__(self, imagefolder: str,
                  tokenizer: transformers.PreTrainedTokenizer,
@@ -77,44 +72,22 @@ class LazyImageDataset(Dataset):
                  max_len=-1):
         super(LazyImageDataset, self).__init__()
         self.imagefolder = imagefolder
-        _dir = os.listdir(imagefolder)
-        all_images = [item for item in _dir \
-                      if (item.endswith('.png') or item.endswith('.jpg') or item.endswith('.jfif'))]
-        print(f'total images: {len(all_images)}')
+        all_images = [item for item in os.listdir(imagefolder) \
+                      if (item.endswith('.png') or item.endswith('.jpg'))]
+
         self.tokenizer = tokenizer
-        
-        # Load captions and create a dictionary for efficient lookup
-        captions_df = pd.read_csv(os.path.join(imagefolder, "captions.csv"))
-        self.caption_dict = dict(zip(captions_df['filename'], captions_df['caption']))
-        
-        # Verify all images have captions
-        missing_captions = [img for img in all_images if img not in self.caption_dict]
-        if missing_captions:
-            print(f"Warning: {len(missing_captions)} images missing captions: {missing_captions[:5]}")
-        
         self.all_images = all_images
         self.data_args = data_args
 
     def __len__(self):
         return len(self.all_images)
 
-    def __getitem__(self, i) -> Dict[str, torch.Tensor]: 
+    def __getitem__(self, i) -> Dict[str, torch.Tensor]:
 
         image_file = os.path.join(self.imagefolder, self.all_images[i])
         image_folder = self.data_args.image_folder
         processor = self.data_args.image_processor
         image = Image.open(os.path.join(image_folder, image_file)).convert('RGB')
-        
-        # Use dictionary lookup instead of iterating through DataFrame
-        caption = self.caption_dict.get(self.all_images[i], "")
-        
-        # Debug: Print caption mapping for first few items
-        if i < 3:
-            print(f"Image {i}: {self.all_images[i]} -> Caption: {caption[:100]}...")
-        
-        if not caption:
-            print(f"Warning: No caption found for image {self.all_images[i]}")
-        
         if self.data_args.image_aspect_ratio == 'pad':
             def expand2square(pil_img, background_color):
                 width, height = pil_img.size
@@ -130,33 +103,10 @@ class LazyImageDataset(Dataset):
                     return result
             image = expand2square(image, tuple(int(x*255) for x in processor.image_mean))
             image = processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
-            
-        if True:
-            processor = self.data_args.image_processor
-            image_trivial = Image.open("docs/images/black_img.jpg").convert('RGB')
-            if self.data_args.image_aspect_ratio == 'pad':
-                def expand2square(pil_img, background_color):
-                    width, height = pil_img.size
-                    if width == height:
-                        return pil_img
-                    elif width > height:
-                        result = Image.new(pil_img.mode, (width, width), background_color)
-                        result.paste(pil_img, (0, (width - height) // 2))
-                        return result
-                    else:
-                        result = Image.new(pil_img.mode, (height, height), background_color)
-                        result.paste(pil_img, ((height - width) // 2, 0))
-                        return result
-                image_trivial = expand2square(image_trivial, tuple(int(x*255) for x in processor.image_mean))
-                image_trivial = processor.preprocess(image_trivial, return_tensors='pt')['pixel_values'][0]
-            else:
-                image_trivial = processor.preprocess(image_trivial, return_tensors='pt')['pixel_values'][0]
-        
+
         data_dict = {}
         data_dict['image'] = image
-        data_dict['image_trivial'] = image_trivial
         data_dict['image_path'] = os.path.join(image_folder, image_file)
-        data_dict['caption'] = caption
 
         return data_dict
 
@@ -205,42 +155,6 @@ def translate_args(model_args, data_args, training_args):
 
     return args
 
-def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
-
-
-def ask_gpt4o(image_path, client):
-    base64_image = encode_image(image_path)
-    prompt = open("docs/prompts/smplified_image_description.txt", "r").read()
-
-    response = client.chat.completions.create(
-        model="gpt-4o-2024-05-13",
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {   
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{base64_image}",
-                            "detail": "low"
-                        }
-                    },
-                ],
-            }
-    ],
-        max_tokens=300,
-    )
-
-    result = response.choices[0].message.content
-
-    result_dict, used_config_text = get_text_labels(result)
-    text_description = json.dumps(result_dict)
-    text_description = text_description.replace('"', "'")
-    return text_description, used_config_text
-
     
 def main(args):
     attn_implementation = 'flash_attention_2'
@@ -286,6 +200,7 @@ def main(args):
         attn_implementation=attn_implementation,
         torch_dtype=(torch.bfloat16 if training_args.bf16 else None),
         seg_token_idx=args.seg_token_idx,
+        # hidden_size=768,
         **bnb_model_from_pretrained_args
     )
     
@@ -304,7 +219,6 @@ def main(args):
         def make_inputs_require_grad(module, input, output):
             output.requires_grad_(True)
         model.get_input_embeddings().register_forward_hook(make_inputs_require_grad)
-
 
     assert model_args.version == "v1"
     tokenizer.pad_token = tokenizer.unk_token
@@ -387,40 +301,35 @@ def main(args):
         dataset_name = data_args.data_path_eval.split('/')[-2]
     else:
         dataset_name = data_args.data_path_eval.split('/')[-1]
-
+        
     args.exp_name = resume_path.split('/')[-2]
-    parent_folder = os.path.join(args.log_base_dir, args.exp_name, f'{dataset_name}_cg_blip')
+    parent_folder = os.path.join(args.log_base_dir, args.exp_name, f'{dataset_name}_cg_baseline')
     if not os.path.exists(parent_folder):
         os.makedirs(parent_folder)
 
     print('val_dataset', len(val_dataset))
     len_val_dataset = len(val_dataset)
-
+    # model.eval()
+    
+    # hmr_batch = next(iter(train_dataset))
     random.seed(0)
+    question = 'Can you estimate the sewing pattern code based on the image?'
     all_output_dir = []
     all_json_spec_files = []
-    for i in range(len_val_dataset):  
+    for i in range(len_val_dataset):    
+        data_item = val_dataset[i]
         garment_id = val_dataset.all_images[i].split('/')[-1]
         garment_id = garment_id.split('.')[0]
         if os.path.exists(os.path.join(parent_folder, 'vis_new', f'valid_garment_{garment_id}', 'output.txt')):
             print(f'{garment_id} already processed, hence skip')
             continue
         
-        data_item = val_dataset[i]      
-
-        image_path = data_item['image_path']
-        description = data_item['caption']
-        
         answers = []
-        question2 = 'Can you estimate the outfit sewing pattern code based mainly on the following Json format garment geometry description and the image, please use the neck, collar, cuffs on the json description?'
         
         conv = conversation_lib.conv_templates[model_args.version].copy()
         conv.messages = []
-        
-        description = description.replace('upper garment', 'upperbody_garment').replace('lower garment', 'lowerbody_garment')
-        
-        prompt = DEFAULT_IMAGE_TOKEN + "\n" + question2 + "\n" + description
-        print('prompt', prompt)
+        prompt = question
+        prompt = DEFAULT_IMAGE_TOKEN + "\n" + prompt
         
         conv.append_message(conv.roles[0], prompt)
         conv.append_message(conv.roles[1], None)
@@ -446,47 +355,41 @@ def main(args):
 
         output_ids = output_ids[0, 1:]
         text_output = tokenizer.decode(output_ids, skip_special_tokens=False).strip().replace("</s>", "")
-        
+
         text_output = text_output.replace('[STARTS]', '').replace('[SEG]', '').replace('[ENDS]', '')
         answers.append(text_output)
 
-        garment_id = image_path.split('/')[-1]
-        garment_id = garment_id.split('.')[0]
-        json_output = repair_json(text_output, return_objects=True)
-        # description = repair_json(description, return_objects=True)
-        
-        # json_output = fix_based_on_description(json_output, description)
+        if True:
+            image_path = data_item['image_path']
+            print('image_path', image_path)
 
-        saved_dir = os.path.join(parent_folder, 'vis_new', f'valid_garment_{garment_id}')
-        if not os.path.exists(saved_dir):
-            os.makedirs(saved_dir)
-        
-        with open(os.path.join(saved_dir, 'output.txt'), 'w') as f:
-            # f.write(str(text_labels))
-            f.write('\nDESCRIPTION\n')
-            f.write(str(description))
-            f.write('\nTEXT OUTPUT\n')
-            f.write(text_output)
-            f.write('\nJSON OUTPUT\n')
-            f.write(str(json_output))
-        
-        with open(os.path.join(saved_dir, 'output.yaml'), 'w') as f:
-            yaml.dump(json_output, f)
+            garment_id = image_path.split('/')[-1]
+            garment_id = garment_id.split('.')[0]
+            json_output = repair_json(text_output, return_objects=True)
 
-        output_dir = saved_dir
-        all_output_dir.append(output_dir)
-        shutil.copy(image_path, os.path.join(output_dir, f'gt_image.png'))
+            saved_dir = os.path.join(parent_folder, 'vis_new', f'valid_garment_{garment_id}')
+            if not os.path.exists(saved_dir):
+                os.makedirs(saved_dir)
+            
+            with open(os.path.join(saved_dir, 'output.txt'), 'w') as f:
+                f.write(prompt)
+                f.write('\n')
+                f.write(text_output)
+                f.write('\n')
+                f.write(str(json_output))
+            
 
-        try:
-            all_json_spec_files = run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir, description)
-        except Exception as e:
-            print('Error:', e)
-        
+            output_dir = saved_dir
+            all_output_dir.append(output_dir)
+            shutil.copy(image_path, os.path.join(output_dir, f'gt_image.png'))
+
+            all_json_spec_files = run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir)
+
     saved_json_Path = os.path.join(parent_folder, 'vis_new', 'all_json_spec_files.json')
     with open(saved_json_Path, 'w') as f:
         json.dump(all_json_spec_files, f)
 
-
+        
 if __name__ == "__main__":
     main(sys.argv[1:])         
 

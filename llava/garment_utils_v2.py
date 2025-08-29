@@ -38,13 +38,15 @@ skirt_configs =  {
 }
 all_skirt_configs = ['skirt', 'flare-skirt', 'godet-skirt', 'pencil-skirt', 'levels-skirt', 'pants']
 
-with open('docs/all_float_paths.json', 'r') as f:
+with open('/workspace/ChatGarment/docs/all_float_paths.json', 'r') as f:
     all_float_paths = json.load(f)
 
 
 with open('/workspace/GarmentCodeRC/assets/design_params/design_used.yaml', 'r') as f:
     designs_config = yaml.safe_load(f)
-    
+
+with open('/workspace/GarmentCodeRC/assets/design_params/ao_dai.yaml', 'r') as f:
+    ao_dai_config = yaml.safe_load(f)
 
 def recursive_change_params(cfg, pred_cfg, invnorm_float=False, parent_path='design'):
     if ('type' not in cfg) or not isinstance(cfg['type'], str):
@@ -183,10 +185,18 @@ def recursive_change_params_1float(cfg, pred_cfg, float_dict, invnorm_float=Fals
 
     return cfg
 
+def ao_dai_recursive_change_params(cfg, pred_cfg):
+    for pred_cfg_key, pred_cfg_value in pred_cfg.items():
+        if isinstance(pred_cfg_value, dict):
+            cfg[pred_cfg_key] = ao_dai_recursive_change_params(cfg[pred_cfg_key], pred_cfg_value)
+        else:
+            cfg[pred_cfg_key]['v'] = pred_cfg_value
+    return cfg
+
 
 def try_generate_garments(body_measurement_path, garment_output, garment_name, output_path, 
-                          body_measurement='neutral', invnorm_float=False, float_dict=None):
-    global designs_config
+                          body_measurement='neutral', invnorm_float=False, float_dict=None, enable_ao_dai=False):
+    global designs_config, ao_dai_config
     bodies_measurements = {
         # Our model
         'neutral': '/workspace/GarmentCodeRC/assets/bodies/mean_all.yaml',
@@ -198,17 +208,20 @@ def try_generate_garments(body_measurement_path, garment_output, garment_name, o
     }
 
     design_pred_raw = garment_output
-    default_config = copy.deepcopy(designs_config)
-
     if 'design' not in design_pred_raw:
-        design_pred_raw = {'design': design_pred_raw}
-
-    if float_dict is not None:
-        design = recursive_change_params_1float(default_config, design_pred_raw, float_dict,
-                                                invnorm_float=invnorm_float, parent_path=None)
+            design_pred_raw = {'design': design_pred_raw}
+    if enable_ao_dai:
+        default_config = copy.deepcopy(ao_dai_config)
+        design = ao_dai_recursive_change_params(default_config, design_pred_raw)
     else:
-        design = recursive_change_params(default_config, design_pred_raw, invnorm_float=invnorm_float)
+        default_config = copy.deepcopy(designs_config)
+        if float_dict is not None:
+            design = recursive_change_params_1float(default_config, design_pred_raw, float_dict,
+                                                    invnorm_float=invnorm_float, parent_path=None)
+        else:
+            design = recursive_change_params(default_config, design_pred_raw, invnorm_float=invnorm_float)
 
+    
     design = design['design']
 
     config = {'design': design}
@@ -350,7 +363,7 @@ def run_garmentcode_sim(json_paths_json):
     return
 
 
-def run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir):
+def run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds, output_dir, description_prompt=None, enable_ao_dai=False):
     if 'upperbody_garment' in json_output:
         upper_config = json_output['upperbody_garment']
         lower_config = json_output['lowerbody_garment']
@@ -375,14 +388,17 @@ def run_garmentcode_parser_float50(all_json_spec_files, json_output, float_preds
         )
     else:
         wholebody_config = json_output['wholebody_garment']
+        
+        if enable_ao_dai:
+            float_dict = float_preds
+        else:
+            float_preds = float_preds.reshape(-1)
+            assert len(float_preds) == len(all_float_paths)
+            float_dict = {
+                k: v for k, v in zip(all_float_paths, float_preds)
+            }
 
-        float_preds = float_preds.reshape(-1)
-        assert len(float_preds) == len(all_float_paths)
-        float_dict = {
-            k: v for k, v in zip(all_float_paths, float_preds)
-        }
-
-        try_generate_garments(None, wholebody_config, 'wholebody', output_dir, invnorm_float=True, float_dict=float_dict)
+        try_generate_garments(None, wholebody_config, 'wholebody', output_dir, invnorm_float=True, float_dict=float_dict, enable_ao_dai=enable_ao_dai)
 
         all_json_spec_files.append(
             os.path.join(output_dir, 'valid_garment_wholebody', f'valid_garment_wholebody_specification.json')
